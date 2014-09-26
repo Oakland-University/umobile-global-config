@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/")
 public class MainController {
 
-	private final String PRE_PROPERTIES_FILE_LOCATION = "mobile/";
-	private final String POST_PROPERTIES_FILE_LOCATION = "/app.properties";
+	private final String PRE_PROPERTIES_FILE_LOCATION = "mobile";
+	private final String POST_PROPERTIES_FILE_LOCATION = "app.properties";
 	private final List<String> ARRAY_PROPERTY_LIST = Arrays.asList("disabledPortlets");
 	private Properties props = new Properties();
 
@@ -28,7 +28,8 @@ public class MainController {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		try{
 			final ClassLoader classLoader = getClass().getClassLoader();
-			final String fileName = PRE_PROPERTIES_FILE_LOCATION + os + "/" + version + POST_PROPERTIES_FILE_LOCATION;
+			final String fileName = String.format("%s/%s/%s/%s", PRE_PROPERTIES_FILE_LOCATION,
+					os, version, POST_PROPERTIES_FILE_LOCATION);
 			final File file = new File(classLoader.getResource(fileName).getFile());
 
 			props.load(new FileInputStream(file));
