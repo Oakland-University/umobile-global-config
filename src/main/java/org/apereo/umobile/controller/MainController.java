@@ -1,6 +1,10 @@
 package org.apereo.umobile.controller;
 
 import java.util.Map;
+import java.util.LinkedHashMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apereo.umobile.service.IPropertiesService;
 
@@ -21,16 +25,23 @@ public class MainController {
 	private final String PRE_PROPERTIES_FILE_LOCATION = "mobile";
 	private final String POST_PROPERTIES_FILE_LOCATION = "app.properties";
 
-	@RequestMapping(value="/{os}/{version}/config", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> getConfig (@PathVariable String os, @PathVariable String version) {
-		final String fileName = String.format("%s/%s/%s/%s", PRE_PROPERTIES_FILE_LOCATION, os, version, 
-				POST_PROPERTIES_FILE_LOCATION);
+	@RequestMapping(value="/{os}/{version}/config", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Map<String, Object> getConfig (@PathVariable String os, @PathVariable String version, 
+			HttpServletRequest request, HttpServletResponse response) {
+		final String fileName = String.format("%s/%s/%s/%s", 
+				PRE_PROPERTIES_FILE_LOCATION, os, version, POST_PROPERTIES_FILE_LOCATION);
+
+		Map<String, Object> properties = new LinkedHashMap<String, Object>();
 
 		if (propertiesService.loadPropertiesFile(fileName)) {
-			return propertiesService.getAllProperties();
+			properties.putAll(propertiesService.getAllProperties());
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST); //return 400 Status Code
 		}
 
-		return null;
+		propertiesService.terminate();
+
+		return properties;
 	}
 
 }

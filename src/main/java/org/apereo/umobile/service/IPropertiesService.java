@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface IPropertiesService {
 
+	public void terminate();
+
 	public boolean loadPropertiesFile(String fileName);
 
 	public Object getProperty(String property);

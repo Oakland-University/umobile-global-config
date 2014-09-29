@@ -35,6 +35,8 @@ public class LocalPropertyServiceImpl implements IPropertiesService {
 	}
 
 	public Object getProperty(String property) {
+		if (!isFileLoaded()) throw new IllegalArgumentException("Property file not loaded!");
+
 		Object temp;
 
 		if(ARRAY_PROPERTY_LIST.contains(property)) {
@@ -48,6 +50,8 @@ public class LocalPropertyServiceImpl implements IPropertiesService {
 	}
 
 	public Map<String, Object> getAllProperties() {
+		if (!isFileLoaded()) throw new IllegalArgumentException("Property file not loaded!");
+
 		final Map<String, Object> map = new LinkedHashMap<String, Object>();
 
 		for (String key : props.stringPropertyNames()) {
@@ -57,27 +61,12 @@ public class LocalPropertyServiceImpl implements IPropertiesService {
 		return map;
 	}
 
+	public void terminate() {
+		props = null;
+	}
+
 	private boolean isFileLoaded() {
 		return props != null;
 	}
 
-	/*
-	public Map<String, Object> getAllProperties() {
-		final Map<String, Object> map = new LinkedHashMap<String, Object>();
-		final Enumeration e = props.propertyNames();
-		while( e.hasMoreElements() ) {
-			final String key = (String) e.nextElement();
-
-			if(ARRAY_PROPERTY_LIST.contains(key)) {
-				final String arrayProperties = props.getProperty(key);
-				map.put(key, Arrays.asList(arrayProperties.split(",")));
-			} else {
-				map.put(key, props.getProperty(key));
-			}
-
-		}
-
-		return map;
-	}
-	*/
 }
