@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.LinkedHashMap;
-import java.util.Enumeration;
+
+import org.apache.commons.io.IOUtils;
 
 import org.springframework.stereotype.Service;
 
@@ -15,17 +16,21 @@ import org.springframework.stereotype.Service;
 public class LocalPropertyServiceImpl implements IPropertiesService {
 
 	private final ClassLoader classLoader = getClass().getClassLoader();
+	private final String CUSTOM_DELIMITER = ",";
 	private final List<String> ARRAY_PROPERTY_LIST = Arrays.asList("disabledPortlets");
 	private Properties props;
+	private FileInputStream fis;
 
 	public boolean loadPropertiesFile(String fileName) {
-		if (props == null) {
- 			props = new Properties();
+		if ((props != null) || (fis != null)){
+			this.terminate();
 		}
 
 		try {
 			final File file = new File(classLoader.getResource(fileName).getFile());
-			props.load(new FileInputStream(file));
+			fis = new FileInputStream(file);
+ 			props = new Properties();
+			props.load(fis);
 		} catch (Exception e) {
 			System.err.println(e);
 			return false;
@@ -41,7 +46,7 @@ public class LocalPropertyServiceImpl implements IPropertiesService {
 
 		if(ARRAY_PROPERTY_LIST.contains(property)) {
 			final String arrayProperties = props.getProperty(property);
-			temp = Arrays.asList(arrayProperties.split(","));
+			temp = Arrays.asList(arrayProperties.split(CUSTOM_DELIMITER));
 		} else {
 			temp = props.getProperty(property);
 		}
@@ -62,6 +67,8 @@ public class LocalPropertyServiceImpl implements IPropertiesService {
 	}
 
 	public void terminate() {
+		IOUtils.closeQuietly(fis);
+		fis = null;
 		props = null;
 	}
 
