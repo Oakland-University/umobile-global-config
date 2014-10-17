@@ -15,65 +15,77 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocalPropertyServiceImpl implements IPropertiesService {
 
-	private final ClassLoader classLoader = getClass().getClassLoader();
-	private final String CUSTOM_DELIMITER = ",";
-	private final List<String> ARRAY_PROPERTY_LIST = Arrays.asList("disabledPortlets");
-	private Properties props;
-	private FileInputStream fis;
+  private final ClassLoader classLoader = getClass().getClassLoader();
 
-	public boolean loadPropertiesFile(String fileName) {
-		if ((props != null) || (fis != null)){
-			this.terminate();
-		}
+  private final String CUSTOM_DELIMITER = ",";
+  private final List<String> ARRAY_PROPERTY_LIST = Arrays.asList("disabledPortlets");
+  private final List<String> BOOLEAN_PROPERTY_LIST = Arrays.asList("upgradeRequired", "upgradeRecommended");
 
-		try {
-			final File file = new File(classLoader.getResource(fileName).getFile());
-			fis = new FileInputStream(file);
- 			props = new Properties();
-			props.load(fis);
-		} catch (Exception e) {
-			System.err.println(e);
-			return false;
-		}
+  private Properties props;
+  private FileInputStream fis;
 
-		return true;
-	}
+  public boolean loadPropertiesFile(String fileName) {
+    if ((props != null) || (fis != null)){
+      this.terminate();
+    }
 
-	public Object getProperty(String property) {
-		if (!isFileLoaded()) throw new IllegalArgumentException("Property file not loaded!");
+    try {
+      final File file = new File(classLoader.getResource(fileName).getFile());
+      fis = new FileInputStream(file);
+      props = new Properties();
+      props.load(fis);
+    } catch (Exception e) {
+      System.err.println(e);
+      return false;
+    }
 
-		Object temp;
+    return true;
+  }
 
-		if(ARRAY_PROPERTY_LIST.contains(property)) {
-			final String arrayProperties = props.getProperty(property);
-			temp = Arrays.asList(arrayProperties.split(CUSTOM_DELIMITER));
-		} else {
-			temp = props.getProperty(property);
-		}
+  public Object getProperty(String property) {
+    if (!isFileLoaded()) throw new IllegalArgumentException("Property file not loaded!");
 
-		return temp;
-	}
+    Object temp;
 
-	public Map<String, Object> getAllProperties() {
-		if (!isFileLoaded()) throw new IllegalArgumentException("Property file not loaded!");
+    if(ARRAY_PROPERTY_LIST.contains(property)) {
 
-		final Map<String, Object> map = new LinkedHashMap<String, Object>();
+      final String arrayProperties = props.getProperty(property);
+      temp = Arrays.asList(arrayProperties.split(CUSTOM_DELIMITER));
 
-		for (String key : props.stringPropertyNames()) {
-			map.put(key, getProperty(key));
-		}
+    } else if (BOOLEAN_PROPERTY_LIST.contains(property)) {
 
-		return map;
-	}
+       final String booleanProperty = props.getProperty(property);
+       temp = Boolean.parseBoolean(booleanProperty);
+       
+    } else {
 
-	public void terminate() {
-		IOUtils.closeQuietly(fis);
-		fis = null;
-		props = null;
-	}
+      temp = props.getProperty(property);
 
-	private boolean isFileLoaded() {
-		return props != null;
-	}
+    }
+
+    return temp;
+  }
+
+  public Map<String, Object> getAllProperties() {
+    if (!isFileLoaded()) throw new IllegalArgumentException("Property file not loaded!");
+
+    final Map<String, Object> map = new LinkedHashMap<String, Object>();
+
+    for (String key : props.stringPropertyNames()) {
+      map.put(key, getProperty(key));
+    }
+
+    return map;
+  }
+
+  public void terminate() {
+    IOUtils.closeQuietly(fis);
+    fis = null;
+    props = null;
+  }
+
+  private boolean isFileLoaded() {
+    return props != null;
+  }
 
 }

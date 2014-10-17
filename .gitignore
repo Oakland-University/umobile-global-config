@@ -1,0 +1,10 @@
+### https://raw.github.com/github/gitignore/master/maven.gitignore
+
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+
