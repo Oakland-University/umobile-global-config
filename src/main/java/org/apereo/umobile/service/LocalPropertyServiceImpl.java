@@ -18,7 +18,7 @@ public class LocalPropertyServiceImpl implements IPropertiesService {
   private final ClassLoader classLoader = getClass().getClassLoader();
 
   private final String CUSTOM_DELIMITER = ",";
-  private final List<String> ARRAY_PROPERTY_LIST = Arrays.asList("disabledPortlets");
+  private final List<String> ARRAY_PROPERTY_LIST = Arrays.asList("disabledPortlets", "disabledFolders");
   private final List<String> BOOLEAN_PROPERTY_LIST = Arrays.asList("upgradeRequired", "upgradeRecommended");
 
   private Properties props;
@@ -56,7 +56,7 @@ public class LocalPropertyServiceImpl implements IPropertiesService {
 
        final String booleanProperty = props.getProperty(property);
        temp = Boolean.parseBoolean(booleanProperty);
-       
+
     } else {
 
       temp = props.getProperty(property);
