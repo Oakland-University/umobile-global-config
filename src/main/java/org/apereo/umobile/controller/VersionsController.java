@@ -26,20 +26,20 @@ public class VersionsController {
 		
     Map<String, List> map = new LinkedHashMap<String, List>();
 
-    File directories = new File(CLASSLOADER.getResource(PRE_FILE_LOCATION).getFile());
-    File[] directoryList = directories.listFiles();
+    File os = new File(CLASSLOADER.getResource(PRE_FILE_LOCATION).getFile());
+    File[] osList = os.listFiles();
 
-    for(File folder: directoryList){
+    for(File osName: osList){
       List<String> list = new ArrayList<String>();
-      if(folder.isDirectory()){
-        File subDirectories = new File(CLASSLOADER.getResource(PRE_FILE_LOCATION + "/" + folder.getName()).getFile());
-        File[] subDirectoryList = subDirectories.listFiles();
-        for(File subFolder: subDirectoryList){
-          if(subFolder.isDirectory()){
-            list.add(subFolder.getName());  
+      if(osName.isDirectory()){
+        File version = new File(CLASSLOADER.getResource(PRE_FILE_LOCATION + "/" + osName.getName()).getFile());
+        File[] versionList = version.listFiles();
+        for(File versionName: versionList){
+          if(versionName.isDirectory()){
+            list.add(versionName.getName());  
           }
         }
-        map.put(folder.getName(), list);
+        map.put(osName.getName(), list);
       }
     }
     return map; 
