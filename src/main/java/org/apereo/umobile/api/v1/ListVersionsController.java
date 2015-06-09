@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/api/v1/")
-public class ApiV1Controller {
+public class ListVersionsController {
 
 	@Autowired
-	private IPropertiesService propertiesService;
+  private IPropertiesService propertiesService;
 
   private final ClassLoader CLASSLOADER = getClass().getClassLoader();
-	private final String PRE_PROPERTIES_FILE_LOCATION = "mobile";
-	private final String POST_PROPERTIES_FILE_LOCATION = "app.properties";
+  private final String PRE_PROPERTIES_FILE_LOCATION = "mobile";
+  private final String POST_PROPERTIES_FILE_LOCATION = "app.properties";
 
 
 	@RequestMapping(value="/versions", method = RequestMethod.GET, produces = "application/json")
