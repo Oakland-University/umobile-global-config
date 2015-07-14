@@ -62,7 +62,7 @@
   </dependencies>
 
   <build>
-    <finalName>umobile-global-config</finalName>
+    <finalName>ugc</finalName>
   </build>
 
 </project>
