@@ -4,7 +4,7 @@
   <groupId>org.apereo</groupId>
   <artifactId>umobile-global-config</artifactId>
   <packaging>war</packaging>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1</version>
   <name>umobile-global-config Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
