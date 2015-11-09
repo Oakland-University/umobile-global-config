@@ -13,4 +13,6 @@
 	<context:component-scan base-package="edu.oakland" />
 	<mvc:annotation-driven />
 
+    <mvc:resources mapping="/android/**" location="/android/" />
+    <mvc:resources mapping="/iOS/**" location="/iOS/" />
 </beans>
