@@ -13,6 +13,10 @@
 	<context:component-scan base-package="edu.oakland" />
 	<mvc:annotation-driven />
 
-    <mvc:resources mapping="/android/**" location="/android/" />
-    <mvc:resources mapping="/iOS/**" location="/iOS/" />
+    <mvc:resources mapping="/android/**" location="/android/">
+        <mvc:cache-control max-age="300" cache-public="true" />
+    </mvc:resources>
+    <mvc:resources mapping="/iOS/**" location="/iOS/">
+        <mvc:cache-control max-age="300" cache-public="true" />
+    </mvc:resources>
 </beans>
